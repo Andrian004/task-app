@@ -15,9 +15,6 @@ export const Footer = () => {
           </Button>
         </div>
       </div>
-      <p className="text-center text-gray-600 py-2">
-        &copy; {new Date().getFullYear()} Nugas. Allrigts reserved.
-      </p>
     </div>
   );
 };

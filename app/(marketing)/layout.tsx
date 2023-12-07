@@ -1,9 +1,15 @@
+import { Metadata } from "next";
 import { Footer } from "./_components/footer";
 import { Navbar } from "./_components/navbar";
 
 interface children {
   children: React.ReactNode;
 }
+
+export const metadata: Metadata = {
+  title: "Preview",
+  description: "Preview nugas",
+};
 
 const MarketingLayout = ({ children }: children) => {
   return (
