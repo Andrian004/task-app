@@ -10,7 +10,13 @@ export const Logo = () => {
       className="hover:opacity-75 cursor-pointer transition items-center gap-x-2 hidden md:flex"
       onClick={() => router.push("/")}
     >
-      <Image src={LogoImg} alt="logo" height={70} width={150} />
+      <Image
+        src={LogoImg}
+        alt="logo"
+        width={100}
+        style={{ height: "auto" }}
+        priority
+      />
     </div>
   );
 };
