@@ -8,4 +8,5 @@ export const poppinsFont = Poppins({
 export const aoboshiOneFont = Aoboshi_One({
   subsets: ["latin"],
   weight: ["400"],
+  preload: true,
 });
