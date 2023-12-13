@@ -6,7 +6,7 @@ type Action<TInput, TOutput> = (
 ) => Promise<ActionState<TInput, TOutput>>;
 
 interface UseActionOptions<TOutput> {
-  onSucess?: (data: TOutput) => void;
+  onSuccess?: (data: TOutput) => void;
   onError?: (error: string) => void;
   onComplete?: () => void;
 }
@@ -33,9 +33,7 @@ export const useAction = <TInput, TOutput>(
           return;
         }
 
-        if (result.fieldErrors) {
-          setFieldErrors(result.fieldErrors);
-        }
+        setFieldErrors(result.fieldErrors);
 
         if (result.error) {
           setError(result.error);
@@ -44,7 +42,7 @@ export const useAction = <TInput, TOutput>(
 
         if (result.data) {
           setData(result.data);
-          options.onSucess?.(result.data);
+          options.onSuccess?.(result.data);
         }
       } finally {
         setIsLoading(false);
