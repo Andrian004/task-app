@@ -31,8 +31,6 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       };
     }
 
-    console.log(listToCopy?.cards.length);
-
     const lastList = await db.list.findFirst({
       where: { boardId },
       orderBy: { order: "desc" },
@@ -41,23 +39,33 @@ const handler = async (data: InputType): Promise<ReturnType> => {
 
     const newOrder = lastList ? lastList.order + 1 : 1;
 
-    list = await db.list.create({
-      data: {
-        title: `${listToCopy.title} - copy`,
-        boardId: listToCopy.boardId,
-        order: newOrder,
-        // cards: {
-        //   createMany: {
-        //     data: listToCopy.cards.map((card) => ({
-        //       title: card.title,
-        //       description: card.description,
-        //       order: card.order,
-        //     })),
-        //   },
-        // },
-      },
-      include: { cards: true },
-    });
+    if (listToCopy.cards.length === 0) {
+      list = await db.list.create({
+        data: {
+          title: `${listToCopy.title} - copy`,
+          boardId: listToCopy.boardId,
+          order: newOrder,
+        },
+      });
+    } else {
+      list = await db.list.create({
+        data: {
+          title: `${listToCopy.title} - copy`,
+          boardId: listToCopy.boardId,
+          order: newOrder,
+          cards: {
+            createMany: {
+              data: listToCopy.cards.map((card) => ({
+                title: card.title,
+                order: card.order,
+                description: card.description,
+              })),
+            },
+          },
+        },
+        include: { cards: true },
+      });
+    }
   } catch (error) {
     return {
       error: "Failed to copy!",
