@@ -9,6 +9,7 @@ import { InputType, ReturnType } from "./type";
 import { CreateBoard } from "./schema";
 import { createAuditLog } from "@/lib/create-audit-log";
 import { hasAvailableCount, incAvailableCount } from "@/lib/org-limit";
+import { checkSubscribtion } from "@/lib/subscribtion";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   const { userId, orgId } = auth();
@@ -20,8 +21,9 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   }
 
   const canCreate = await hasAvailableCount();
+  const isProVersion = await checkSubscribtion();
 
-  if (!canCreate) {
+  if (!canCreate && !isProVersion) {
     return {
       error:
         "You have reached your free board limit. Please upgrade for unlock unlimited limit!",
@@ -59,7 +61,9 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       },
     });
 
-    await incAvailableCount();
+    if (!isProVersion) {
+      await incAvailableCount();
+    }
 
     await createAuditLog({
       entityId: board.id,
